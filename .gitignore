@@ -1,0 +1,11 @@
+go
+local/
+
+*.db
+*.pyc
+__pycache__/
+dist/
+*.egg-info
+.DS_Store
+.coverage
+

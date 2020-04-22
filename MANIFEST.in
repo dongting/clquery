@@ -1,0 +1,16 @@
+include *.md
+include LICENSE
+include MANIFEST.in
+include setup.py
+include requirements.txt
+
+recursive-include clquery *
+recursive-include test *
+
+exclude go
+global-exclude *.db
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .DS_Store
+global-exclude .coverage
+recursive-exclude local *

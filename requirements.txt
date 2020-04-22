@@ -1,0 +1,6 @@
+boto3==1.12.20
+tabulate==0.8.6
+# setuptools no longer allow linking to a non-PyPI source,
+# so we'll handle apsw install separately in setup.py
+# apsw @ https://github.com/rogerbinns/apsw/releases/download/3.31.1-r1/apsw-3.31.1-r1.zip#sha256=dd7913cc6e547ac584aee369af3c76a0993892c9dced6fc908771d66322d57bd
+
