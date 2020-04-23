@@ -93,9 +93,14 @@ class CliShell(PythonShell):
                     missingval='NULL'
                 ) + '\n'
             )
-        self.write(
-            self.stdout, '[{} rows returned]\n'.format(str(len(output)))
-        )
+            self.write(
+                self.stdout,
+                '[{} rows returned]\n'.format(str(len(output) - 1))
+            )
+        else:
+            self.write(
+                self.stdout, '[0 rows returned]\n'
+            )
 
 
 if __name__ == '__main__':
