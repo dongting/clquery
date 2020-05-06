@@ -7,7 +7,7 @@ from setuptools.command.install import install as _install
 import setuptools
 
 
-VERSION = '0.0.1rc7'
+VERSION = '0.1.0'
 APSW_VERSION = '3.31.1-r1'
 SQLITE_VERSION = '3.31.1'
 
