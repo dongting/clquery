@@ -38,7 +38,6 @@ class BaseSchema(Singleton):
     def __init__(self):
         self.table_name = None
         self.fields = []
-        self.cached_data = []
 
     def register_fields(self, fields_list):
         self.fields = list(zip(range(len(fields_list)), fields_list))
@@ -101,14 +100,6 @@ class BaseSchema(Singleton):
                 output.append(row)
                 keys[dedupe_key] = True
         return output
-
-    def get_fresh_data(self, *args, **kwargs):
-        data = self.get_data(*args, **kwargs)
-        self.cached_data = data
-        return data
-
-    def get_cached_data(self):
-        return self.cached_data
 
     def get_data(self, constraints={}):
         ''' call API and extract data from response '''

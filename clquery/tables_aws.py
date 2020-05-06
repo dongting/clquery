@@ -2,11 +2,13 @@ import boto3
 from botocore.exceptions import ClientError
 
 from .schema import BaseSchema, Field
-
+from .clconfig import ClqueryConfig
 
 class Aws(object):
     service_lookup = {}
-    default_region = boto3.Session().region_name
+    default_region = boto3.Session(
+        profile_name=ClqueryConfig.get('aws_profile')
+    ).region_name
 
     @classmethod
     def get_default_region(cls):
@@ -57,7 +59,9 @@ class Aws(object):
                 region in cls.service_lookup[service]:
             session, client = cls.service_lookup[service][region]
         else:
-            session = boto3.Session()
+            session = boto3.Session(
+                profile_name=ClqueryConfig.get('aws_profile')
+            )
             client = session.client(service, region_name=region)
             if service not in cls.service_lookup:
                 cls.service_lookup[service] = {}

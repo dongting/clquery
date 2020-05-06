@@ -42,7 +42,12 @@ WHERE vm.region='us-west-2'
   AND sgr.ip_range='0.0.0.0/0';
 ```
 
+## Other trivia
+- The SQL engine is powered by [SQLite](https://sqlite.org/) and [APSW](https://github.com/rogerbinns/apsw) through [Virtual Tables](https://sqlite.org/vtab.html)
+- The shell is also (almost) a SQLite shell, and dot commands will work (e.g. `.tables`)
+
+
 ## Inspiration and reality
-The goal is to support mainstream services on major cloud providers. However, it currently supports only AWS for a few services.
+The goal is to support mainstream services on major cloud providers. However, it currently only supports AWS for a few services.
 
 This project is inspired by [osquery](https://osquery.io/).

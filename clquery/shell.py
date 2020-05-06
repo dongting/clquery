@@ -4,16 +4,10 @@ from tabulate import tabulate
 
 from . import table_registry
 from . import vtable
+from .clconfig import ClqueryConfig
 
 
 def setup():
-    ''' This setups two sets of tables:
-        1. the real tables that implement sqlite vtables and would
-           make outbound network calls to fetch live results
-        2. a cached version of each real table that contains the results
-           from the last run. This allows further offline iteration.
-           The name of the cached table is _ appended by the real name
-    '''
     conn = apsw.Connection('')
     tables = table_registry.get_tables()
     cloud_module = vtable.CloudModule(conn)
@@ -30,15 +24,12 @@ def setup():
                 table.get_table_name(), col_schema
             )
         )
-        conn.cursor().execute(
-            'CREATE VIRTUAL TABLE {} USING clquery_module({})'.format(
-                '_' + table.get_table_name(), col_schema
-            )
-        )
     return conn
 
 
 def interactive_mode():
+    ClqueryConfig.parse_args(sys.argv)
+
     conn = setup()
     interactive = CliShell(db=conn)
     interactive.command_prompt([
@@ -66,15 +57,14 @@ class PythonShell(apsw.Shell):
 
     def process_complete_line(self, command):
         self.output_buffer = []
-        # sys.stdout.flush()
-        # sys.stdout.write('\r')
-        sys.stdout.flush()
-        sys.stdout.write('[querying...]')
-        sys.stdout.flush()
+        if not command.startswith('.'):
+            sys.stdout.write('[querying...]')
+            sys.stdout.flush()
         super().process_complete_line(command)
         sys.stdout.write('\r')
         sys.stdout.flush()
-        self.emit_output(self.output_buffer)
+        if not command.startswith('.'):
+            self.emit_output(self.output_buffer)
 
     def emit_output(self, output):
         ''' This function needs to be implemented by the subclass'''

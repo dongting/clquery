@@ -27,5 +27,3 @@ def get_obj_by_table_name(table_name):
         elt_name = elt_fn()
         if elt_name and elt_name == table_name:
             return elt_obj
-        elif elt_name and '_' + elt_name == table_name:
-            return elt_obj
