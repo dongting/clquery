@@ -577,6 +577,7 @@ class AwsVpc(BaseSchema):
         self.register_fields([
             Field('region', 'TEXT', filterable=True),
             Field('vpc_id', 'TEXT', filterable=True),
+            Field('name', 'TEXT'),
             Field('cidr', 'TEXT'),
             Field('dhcp_options_id', 'TEXT'),
             Field('is_default', 'TEXT')
@@ -595,9 +596,16 @@ class AwsVpc(BaseSchema):
         )
         for region, resp in resps:
             for vpc in resp['Vpcs']:
+                tags = vpc.get('Tags')
+                tag_name = None
+                for tag in tags:
+                    if tag.get('Key') and tag['Key'] == 'Name':
+                        tag_name = tag.get('Value')
+                        break
                 data.append([
                     region,
                     vpc.get('VpcId'),
+                    tag_name,
                     vpc.get('CidrBlock'),
                     vpc.get('DhcpOptionsId'),
                     vpc.get('IsDefault')
@@ -606,6 +614,7 @@ class AwsVpc(BaseSchema):
                     data.append([
                         region,
                         vpc.get('VpcId'),
+                        tag_name,
                         assn.get('CidrBlock'),
                         vpc.get('DhcpOptionsId'),
                         vpc.get('IsDefault')
@@ -704,6 +713,7 @@ class AwsVpcSubnet(BaseSchema):
             Field('subnet_id', 'TEXT', filterable=True),
             Field('vpc_id', 'TEXT', filterable=True),
             Field('cidr', 'TEXT', filterable=True),
+            Field('name', 'TEXT'),
             Field('default_for_az', 'TEXT'),
             Field('public_ip_on_launch', 'TEXT'),
             Field('available_ip_address_count', 'INTEGER'),
@@ -726,11 +736,18 @@ class AwsVpcSubnet(BaseSchema):
         )
         for region, resp in resps:
             for subnet in resp['Subnets']:
+                tags = subnet.get('Tags')
+                tag_name = None
+                for tag in tags:
+                    if tag.get('Key') and tag['Key'] == 'Name':
+                        tag_name = tag.get('Value')
+                        break
                 data.append([
                     region,
                     subnet.get('SubnetId'),
                     subnet.get('VpcId'),
                     subnet.get('CidrBlock'),
+                    tag_name,
                     subnet.get('DefaultForAz'),
                     subnet.get('MapPublicIpOnLaunch'),
                     subnet.get('AvailableIpAddressCount'),

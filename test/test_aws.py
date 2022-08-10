@@ -336,14 +336,20 @@ class TestAws(TestCase):
                 },
             ],
             'IsDefault': True,
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "Shared VPC"
+                }
+            ]
         }]})]
         mock_aws.side_effect = [resp]
 
         table = AwsVpc()
         data = table.get_data()
 
-        self.assertIn(['us-west-2', 't3', 't1', 't2', True], data)
-        self.assertIn(['us-west-2', 't3', 't4', 't2', True], data)
+        self.assertIn(['us-west-2', 't3', 'Shared VPC', 't1', 't2', True], data)
+        self.assertIn(['us-west-2', 't3', 'Shared VPC', 't4', 't2', True], data)
         self.assertEqual(len(data), 2)
 
     def test_aws_vpc_peering_connection(self, mock_aws, mock_region, mock_client):
@@ -435,13 +441,19 @@ class TestAws(TestCase):
             'MapPublicIpOnLaunch': False,
             'SubnetId': 't4',
             'VpcId': 't5',
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "MySubnet"
+                }
+            ],
         }]})]
         mock_aws.side_effect = [resp]
 
         table = AwsVpcSubnet()
         data = table.get_data()
 
-        self.assertIn(['us-west-2', 't4', 't5', 't3', True, False, 123, 't1', 't2'], data)
+        self.assertIn(['us-west-2', 't4', 't5', 't3', 'MySubnet', True, False, 123, 't1', 't2'], data)
         self.assertEqual(len(data), 1)
 
     def test_aws_elastic_ip(self, mock_aws, mock_region, mock_client):
