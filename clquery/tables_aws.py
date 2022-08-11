@@ -596,7 +596,7 @@ class AwsVpc(BaseSchema):
         )
         for region, resp in resps:
             for vpc in resp['Vpcs']:
-                tags = vpc.get('Tags')
+                tags = vpc.get('Tags', [])
                 tag_name = None
                 for tag in tags:
                     if tag.get('Key') and tag['Key'] == 'Name':
@@ -736,7 +736,7 @@ class AwsVpcSubnet(BaseSchema):
         )
         for region, resp in resps:
             for subnet in resp['Subnets']:
-                tags = subnet.get('Tags')
+                tags = subnet.get('Tags', [])
                 tag_name = None
                 for tag in tags:
                     if tag.get('Key') and tag['Key'] == 'Name':
